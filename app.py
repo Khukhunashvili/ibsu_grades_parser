@@ -3,13 +3,23 @@ import atexit
 from firebase import Firebase
 from ibsu_grade_parser import IBSU_Parser
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask
+from flask import Flask, request, Response
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
    return "Hello World"
+
+@app.route('/login', methods = ['POST'])
+def validate_credentials():
+    username = request.json["username"]
+    password = request.json["password"]
+
+    sis = IBSU_Parser(username, password)
+    if not sis.authenticated:
+        return Response("{'error':'Unauthorized'}", status=401, mimetype='application/json')
+    return Response("{'authorization':'success'}", status=200, mimetype='application/json')
 
 def update_grades():
     print("-------------------------------")
