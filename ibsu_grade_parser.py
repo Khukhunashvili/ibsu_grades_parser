@@ -29,7 +29,7 @@ class IBSU_Parser:
             self.grades = {}
 
             for index, course in enumerate(self.courses):
-                self.grades[course] = self.get_grades(session, course)
+                self.grades[course.title] = self.get_grades(session, course)
 
     def get_courses(self, html):
         tbody = re.findall(r"<tbody[^>]*>[\s\S]*?</tbody>\s*", html)[0]
